@@ -1,0 +1,370 @@
+/* Estilos generales */
+:root {
+  --primary: #3498db;
+  --primary-dark: #2980b9;
+  --primary-light: #d6eaf8;
+  --secondary: #2ecc71;
+  --secondary-dark: #27ae60;
+  --danger: #e74c3c;
+  --danger-dark: #c0392b;
+  --danger-light: #fadbd8;
+  --warning: #f39c12;
+  --warning-dark: #d35400;
+  --dark: #2c3e50;
+  --light: #ecf0f1;
+  --gray: #95a5a6;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f8f9fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Contenedores */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Login */
+.login-container {
+  background-color: white;
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--dark);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Cabecera */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--light);
+}
+
+.header h1 {
+  color: var(--dark);
+  font-size: 2.2rem;
+}
+
+/* Formulario de verbos */
+.verb-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 30px;
+  background-color: white;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.verb-form input,
+.verb-form select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+}
+
+.verb-form input:focus,
+.verb-form select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.btn-submit {
+  background-color: var(--secondary);
+  color: white;
+  font-weight: 600;
+  padding: 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: var(--secondary-dark);
+}
+
+/* Botones de tipo de verbo */
+.verb-type-container {
+  display: flex;
+  gap: 8px;
+}
+
+.verb-type-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.verb-type-btn.regular {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.verb-type-btn.irregular {
+  background-color: var(--danger-light);
+  color: var(--danger-dark);
+}
+
+.verb-type-btn.active.regular {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.verb-type-btn.active.irregular {
+  background-color: var(--danger);
+  color: white;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Filas de la tabla con colores */
+.regular-row {
+  background-color: #eaf2f8;
+}
+
+.irregular-row {
+  background-color: #fdedec;
+}
+
+.regular-row:hover {
+  background-color: #d4e6f1;
+}
+
+.irregular-row:hover {
+  background-color: #fadbd8;
+}
+
+/* Barra de búsqueda */
+.search-container {
+  margin: 20px 0;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* Tabla de verbos */
+.table-container {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: var(--dark);
+  color: white;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+
+tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.regular {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.irregular {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Botones de acción */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit {
+  background-color: var(--warning);
+  color: white;
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn-edit:hover {
+  background-color: var(--warning-dark);
+}
+
+.btn-delete {
+  background-color: var(--danger);
+  color: white;
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn-delete:hover {
+  background-color: var(--danger-dark);
+}
+
+/* Mensaje cuando no hay verbos */
+.empty-message {
+  text-align: center;
+  padding: 30px;
+  color: var(--gray);
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .verb-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .verb-type-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  
+  .header h1 {
+    font-size: 1.8rem;
+  }
+  
+  th, td {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .btn-edit, .btn-delete {
+    width: 100%;
+    text-align: center;
+  }
+  
+  table {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 20px;
+  }
+  
+  .verb-form {
+    padding: 15px;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+  }
+}
