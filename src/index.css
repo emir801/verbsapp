@@ -10,11 +10,14 @@
   --danger-light: #fadbd8;
   --warning: #f39c12;
   --warning-dark: #d35400;
+  --phrasal: #9b59b6;
+  --phrasal-dark: #8e44ad;
+  --phrasal-light: #e8daef;
   --dark: #2c3e50;
   --light: #ecf0f1;
   --gray: #95a5a6;
-  --border-radius: 8px;
-  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --border-radius: 6px;
+  --box-shadow: 0 3px 5px rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -27,7 +30,8 @@
 body {
   background-color: #f8f9fa;
   color: #333;
-  line-height: 1.6;
+  line-height: 1.5;
+  font-size: 14px;
 }
 
 /* Contenedores */
@@ -35,7 +39,7 @@ body {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 15px;
 }
 
 .flex-center {
@@ -48,29 +52,30 @@ body {
 /* Login */
 .login-container {
   background-color: white;
-  padding: 30px;
+  padding: 25px;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
 }
 
 .login-container h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   color: var(--dark);
+  font-size: 1.5rem;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .form-group input {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: var(--border-radius);
-  font-size: 16px;
+  font-size: 13px;
   transition: border-color 0.3s;
 }
 
@@ -82,10 +87,10 @@ body {
 .btn {
   display: block;
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   border: none;
   border-radius: var(--border-radius);
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -103,34 +108,35 @@ body {
 /* Cabecera */
 .header {
   text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid var(--light);
+  margin-bottom: 25px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--light);
 }
 
 .header h1 {
   color: var(--dark);
-  font-size: 2.2rem;
+  font-size: 1.8rem;
 }
 
 /* Formulario de verbos */
 .verb-form {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(4, 1fr) 1.5fr;
+  gap: 8px;
+  margin-bottom: 25px;
   background-color: white;
-  padding: 20px;
+  padding: 15px;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
 }
 
 .verb-form input,
 .verb-form select {
-  padding: 12px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: var(--border-radius);
-  font-size: 16px;
+  font-size: 13px;
+  transition: all 0.3s;
 }
 
 .verb-form input:focus,
@@ -143,12 +149,13 @@ body {
   background-color: var(--secondary);
   color: white;
   font-weight: 600;
-  padding: 12px;
+  padding: 10px;
   border: none;
   border-radius: var(--border-radius);
-  font-size: 16px;
+  font-size: 13px;
   cursor: pointer;
   transition: background-color 0.3s;
+  height: 100%;
 }
 
 .btn-submit:hover {
@@ -157,19 +164,22 @@ body {
 
 /* Botones de tipo de verbo */
 .verb-type-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 8px;
+  grid-column: span 3;
 }
 
 .verb-type-btn {
-  flex: 1;
-  padding: 12px;
+  padding: 10px;
   border: none;
   border-radius: var(--border-radius);
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
+  text-align: center;
+  min-width: 80px;
 }
 
 .verb-type-btn.regular {
@@ -182,25 +192,40 @@ body {
   color: var(--danger-dark);
 }
 
+.verb-type-btn.phrasal {
+  background-color: var(--phrasal-light);
+  color: var(--phrasal-dark);
+}
+
 .verb-type-btn.active.regular {
   background-color: var(--primary);
   color: white;
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.15);
 }
 
 .verb-type-btn.active.irregular {
   background-color: var(--danger);
   color: white;
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+.verb-type-btn.active.phrasal {
+  background-color: var(--phrasal);
+  color: white;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.15);
 }
 
 /* Filas de la tabla con colores */
 .regular-row {
-  background-color: #eaf2f8;
+  background-color: var(--primary-light);
 }
 
 .irregular-row {
-  background-color: #fdedec;
+  background-color: var(--danger-light);
+}
+
+.phrasal-row {
+  background-color: var(--phrasal-light);
 }
 
 .regular-row:hover {
@@ -211,25 +236,29 @@ body {
   background-color: #fadbd8;
 }
 
+.phrasal-row:hover {
+  background-color: #d7bde2;
+}
+
 /* Barra de búsqueda */
 .search-container {
-  margin: 20px 0;
+  margin: 18px 0;
 }
 
 .search-input {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: var(--border-radius);
-  font-size: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 13px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: all 0.3s;
 }
 
 .search-input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
 }
 
 /* Tabla de verbos */
@@ -244,13 +273,42 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px;
+  min-width: 700px;
 }
 
 th, td {
-  padding: 15px;
+  padding: 12px;
   text-align: left;
   border-bottom: 1px solid #eee;
+  font-size: 13px;
+  word-break: break-word;
+}
+
+/* Nuevos anchos de columnas */
+th:nth-child(1), td:nth-child(1) { /* Verbo */
+  width: 15%;
+  font-size: 12px;
+}
+
+th:nth-child(2), td:nth-child(2) { /* Traducción */
+  width: 25%;
+  font-weight: 500;
+}
+
+th:nth-child(3), td:nth-child(3) { /* Pasado */
+  width: 15%;
+}
+
+th:nth-child(4), td:nth-child(4) { /* Participio */
+  width: 15%;
+}
+
+th:nth-child(5), td:nth-child(5) { /* Tipo */
+  width: 10%;
+}
+
+th:nth-child(6), td:nth-child(6) { /* Acciones */
+  width: 20%;
 }
 
 th {
@@ -259,6 +317,7 @@ th {
   font-weight: 600;
   position: sticky;
   top: 0;
+  font-size: 13px;
 }
 
 tbody tr:hover {
@@ -266,29 +325,35 @@ tbody tr:hover {
 }
 
 .regular {
-  color: var(--primary);
+  color: var(--primary-dark);
   font-weight: 600;
 }
 
 .irregular {
-  color: var(--danger);
+  color: var(--danger-dark);
+  font-weight: 600;
+}
+
+.phrasal {
+  color: var(--phrasal-dark);
   font-weight: 600;
 }
 
 /* Botones de acción */
 .action-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  justify-content: center;
 }
 
 .btn-edit {
   background-color: var(--warning);
   color: white;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: var(--border-radius);
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   transition: background-color 0.3s;
 }
 
@@ -299,11 +364,11 @@ tbody tr:hover {
 .btn-delete {
   background-color: var(--danger);
   color: white;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: var(--border-radius);
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   transition: background-color 0.3s;
 }
 
@@ -314,30 +379,130 @@ tbody tr:hover {
 /* Mensaje cuando no hay verbos */
 .empty-message {
   text-align: center;
-  padding: 30px;
+  padding: 25px;
   color: var(--gray);
   font-style: italic;
+  font-size: 13px;
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+  .verb-form {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .verb-type-container {
+    grid-column: span 3;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  
+  .btn-submit {
+    grid-column: span 3;
+  }
+  
+  /* Ajustes de tabla */
+  th:nth-child(1), td:nth-child(1) {
+    width: 18%;
+  }
+
+  th:nth-child(2), td:nth-child(2) {
+    width: 30%;
+  }
+}
+
+@media (max-width: 992px) {
+  .verb-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .verb-type-container {
+    grid-column: span 2;
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .btn-submit {
+    grid-column: span 2;
+  }
+  
+  .verb-type-btn.phrasal {
+    grid-column: span 2;
+  }
+  
+  /* Ajustes de tabla */
+  th:nth-child(1), td:nth-child(1) {
+    width: 18%;
+  }
+
+  th:nth-child(2), td:nth-child(2) {
+    width: 30%;
+  }
+  
+  th:nth-child(3), td:nth-child(3) {
+    width: 14%;
+  }
+  
+  th:nth-child(4), td:nth-child(4) {
+    width: 14%;
+  }
+  
+  th:nth-child(5), td:nth-child(5) {
+    width: 12%;
+  }
+  
+  th:nth-child(6), td:nth-child(6) {
+    width: 12%;
+  }
+}
+
 @media (max-width: 768px) {
   .verb-form {
     grid-template-columns: 1fr;
   }
   
   .verb-type-container {
-    display: grid;
+    grid-column: 1;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 6px;
   }
   
-  .header h1 {
-    font-size: 1.8rem;
+  .btn-submit {
+    grid-column: 1;
   }
   
-  th, td {
-    padding: 10px;
-    font-size: 14px;
+  .verb-type-btn.phrasal {
+    grid-column: span 2;
+  }
+  
+  /* Ajustes de tabla */
+  table {
+    min-width: 600px;
+  }
+  
+  th:nth-child(1), td:nth-child(1) {
+    width: 16%;
+    font-size: 11px;
+  }
+
+  th:nth-child(2), td:nth-child(2) {
+    width: 28%;
+  }
+  
+  th:nth-child(3), td:nth-child(3) {
+    width: 13%;
+    font-size: 11px;
+  }
+  
+  th:nth-child(4), td:nth-child(4) {
+    width: 13%;
+    font-size: 11px;
+  }
+  
+  th:nth-child(5), td:nth-child(5) {
+    width: 12%;
+  }
+  
+  th:nth-child(6), td:nth-child(6) {
+    width: 18%;
   }
   
   .action-buttons {
@@ -348,23 +513,118 @@ tbody tr:hover {
   .btn-edit, .btn-delete {
     width: 100%;
     text-align: center;
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 576px) {
+  .verb-type-container {
+    grid-template-columns: 1fr;
   }
   
-  table {
-    min-width: 100%;
+  .login-container {
+    padding: 20px;
+    margin: 12px;
+  }
+  
+  .verb-form {
+    padding: 12px;
+  }
+  
+  .header h1 {
+    font-size: 1.4rem;
+  }
+  
+  .container {
+    padding: 10px;
+  }
+  
+  body {
+    font-size: 13px;
+  }
+  
+  .verb-type-btn.phrasal {
+    grid-column: 1;
   }
 }
 
 @media (max-width: 480px) {
-  .login-container {
-    padding: 20px;
+  .action-buttons {
+    flex-direction: row;
+    justify-content: center;
   }
   
-  .verb-form {
-    padding: 15px;
+  .btn-edit, .btn-delete {
+    width: auto;
+    padding: 6px 8px;
   }
   
-  .header h1 {
-    font-size: 1.5rem;
+  .verb-type-btn {
+    font-size: 10px;
+    padding: 6px;
   }
+  
+  /* Ajustes de tabla */
+  table {
+    min-width: 500px;
+  }
+  
+  th:nth-child(1), td:nth-child(1) {
+    width: 18%;
+    font-size: 10px;
+  }
+
+  th:nth-child(2), td:nth-child(2) {
+    width: 30%;
+  }
+  
+  th:nth-child(3), td:nth-child(3) {
+    width: 12%;
+    font-size: 10px;
+  }
+  
+  th:nth-child(4), td:nth-child(4) {
+    width: 12%;
+    font-size: 10px;
+  }
+  
+  th:nth-child(5), td:nth-child(5) {
+    width: 12%;
+  }
+  
+  th:nth-child(6), td:nth-child(6) {
+    width: 16%;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 3px;
+  }
+  
+  .btn-edit, .btn-delete {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+tbody tr {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Efecto para botones de tipo */
+.verb-type-btn {
+  transform: scale(1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.verb-type-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
 }

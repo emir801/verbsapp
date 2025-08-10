@@ -7,7 +7,7 @@ import {
   updateDoc,
   getDoc,
 } from "firebase/firestore";
-import "./index.css";
+import "./App.css";
 
 const App = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +26,7 @@ const App = () => {
   const [isLogged, setIsLogged] = useState(false);
   const [verbsList, setVerbsList] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); // Nuevo estado para búsqueda
+  const [searchTerm, setSearchTerm] = useState("");
 
   const userKey = `${userInfo.className}_${userInfo.username}`;
 
@@ -70,6 +70,15 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Validar campos requeridos
+    if (formData.tipo !== "phrasal") {
+      if (!formData.pasado || !formData.participio) {
+        alert("Los campos Pasado y Participio son requeridos para verbos regulares e irregulares");
+        return;
+      }
+    }
+    
     if (editingIndex !== null) {
       const updated = [...verbsList];
       updated[editingIndex] = formData;
@@ -102,9 +111,17 @@ const App = () => {
     setEditingIndex(index);
   };
 
+  const handleTypeChange = (type) => {
+    setFormData({
+      ...formData,
+      tipo: type
+    });
+  };
+
   // Filtrar verbos por término de búsqueda
   const filteredVerbs = verbsList.filter(verb => 
-    verb.verbo.toLowerCase().includes(searchTerm.toLowerCase())
+    verb.verbo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    verb.traduccion.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (!isLogged) {
@@ -150,7 +167,7 @@ const App = () => {
         <input
           type="text"
           name="verbo"
-          placeholder="Verbo"
+          placeholder="Verbo o Phrasal Verb"
           value={formData.verbo}
           onChange={handleChange}
           required
@@ -169,7 +186,6 @@ const App = () => {
           placeholder="Pasado simple"
           value={formData.pasado}
           onChange={handleChange}
-          required
         />
         <input
           type="text"
@@ -177,7 +193,6 @@ const App = () => {
           placeholder="Participio pasado"
           value={formData.participio}
           onChange={handleChange}
-          required
         />
         
         {/* Botones para seleccionar tipo de verbo */}
@@ -185,16 +200,23 @@ const App = () => {
           <button
             type="button"
             className={`verb-type-btn regular ${formData.tipo === 'regular' ? 'active' : ''}`}
-            onClick={() => setFormData({...formData, tipo: 'regular'})}
+            onClick={() => handleTypeChange('regular')}
           >
             Regular
           </button>
           <button
             type="button"
             className={`verb-type-btn irregular ${formData.tipo === 'irregular' ? 'active' : ''}`}
-            onClick={() => setFormData({...formData, tipo: 'irregular'})}
+            onClick={() => handleTypeChange('irregular')}
           >
             Irregular
+          </button>
+          <button
+            type="button"
+            className={`verb-type-btn phrasal ${formData.tipo === 'phrasal' ? 'active' : ''}`}
+            onClick={() => handleTypeChange('phrasal')}
+          >
+            Phrasal Verb
           </button>
         </div>
         
@@ -210,7 +232,7 @@ const App = () => {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Buscar verbo en español..."
+          placeholder="Buscar verbo o traducción..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
@@ -230,33 +252,42 @@ const App = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredVerbs.map((verb, index) => (
-              <tr key={index} className={`${verb.tipo}-row`}>
-                <td>{verb.verbo}</td>
-                <td>{verb.traduccion}</td>
-                <td>{verb.pasado}</td>
-                <td>{verb.participio}</td>
-                <td className={verb.tipo}>
-                  {verb.tipo === "regular" ? "Regular" : "Irregular"}
-                </td>
-                <td>
-                  <div className="action-buttons">
-                    <button
-                      onClick={() => handleEdit(index)}
-                      className="btn-edit"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => handleDelete(index)}
-                      className="btn-delete"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
+            {filteredVerbs.length > 0 ? (
+              filteredVerbs.map((verb, index) => (
+                <tr key={index} className={`${verb.tipo}-row`}>
+                  <td>{verb.verbo}</td>
+                  <td>{verb.traduccion}</td>
+                  <td>{verb.pasado}</td>
+                  <td>{verb.participio}</td>
+                  <td className={verb.tipo}>
+                    {verb.tipo === "regular" ? "Regular" : 
+                     verb.tipo === "irregular" ? "Irregular" : "Phrasal Verb"}
+                  </td>
+                  <td>
+                    <div className="action-buttons">
+                      <button
+                        onClick={() => handleEdit(index)}
+                        className="btn-edit"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => handleDelete(index)}
+                        className="btn-delete"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="empty-message">
+                  No se encontraron verbos. ¡Agrega tu primer verbo!
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
