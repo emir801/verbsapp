@@ -25,8 +25,9 @@ const App = () => {
 
   const [isLogged, setIsLogged] = useState(false);
   const [verbsList, setVerbsList] = useState([]);
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingId, setEditingId] = useState(null); // Cambiado a ID en lugar de índice
   const [searchTerm, setSearchTerm] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const userKey = `${userInfo.className}_${userInfo.username}`;
 
@@ -36,7 +37,18 @@ const App = () => {
     const ref = doc(db, "verbLists", userKey);
     const unsubscribe = onSnapshot(ref, (docSnap) => {
       if (docSnap.exists()) {
-        setVerbsList(docSnap.data().verbs || []);
+        const verbs = docSnap.data().verbs || [];
+        // Agregar ID único a cada verbo
+        const verbsWithId = verbs.map(verb => ({
+          ...verb,
+          id: Math.random().toString(36).substr(2, 9) // ID único
+        }));
+        
+        // Ordenar verbos alfabéticamente por traducción (inglés)
+        const sortedVerbs = [...verbsWithId].sort((a, b) => 
+          a.traduccion.localeCompare(b.traduccion)
+        );
+        setVerbsList(sortedVerbs);
       }
     });
     return () => unsubscribe();
@@ -44,13 +56,19 @@ const App = () => {
 
   // Guardar manualmente
   const saveVerbsToFirestore = async (newVerbsList) => {
+    // Eliminar IDs antes de guardar en Firebase
+    const verbsToSave = newVerbsList.map(({id, ...rest}) => rest);
     const ref = doc(db, "verbLists", userKey);
-    await updateDoc(ref, { verbs: newVerbsList });
+    await updateDoc(ref, { verbs: verbsToSave });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((f) => ({ ...f, [name]: value }));
+    // Limpiar mensajes de error al cambiar el campo de traducción
+    if (name === "traduccion" && errorMessage) {
+      setErrorMessage("");
+    }
   };
 
   const handleUserInfoChange = (e) => {
@@ -74,21 +92,53 @@ const App = () => {
     // Validar campos requeridos
     if (formData.tipo !== "phrasal") {
       if (!formData.pasado || !formData.participio) {
-        alert("Los campos Pasado y Participio son requeridos para verbos regulares e irregulares");
+        setErrorMessage("Los campos Pasado y Participio son requeridos para verbos regulares e irregulares");
         return;
       }
     }
     
-    if (editingIndex !== null) {
-      const updated = [...verbsList];
-      updated[editingIndex] = formData;
-      setVerbsList(updated);
-      saveVerbsToFirestore(updated);
-      setEditingIndex(null);
+    // Verificar si el verbo en inglés ya existe
+    const normalizedEnglish = formData.traduccion.trim().toLowerCase();
+    const isDuplicate = verbsList.some((verb) => {
+      // Excluir el verbo que estamos editando de la verificación
+      if (editingId && verb.id === editingId) return false;
+      return verb.traduccion.trim().toLowerCase() === normalizedEnglish;
+    });
+    
+    if (isDuplicate) {
+      setErrorMessage("Este verbo en inglés ya ha sido agregado anteriormente");
+      return;
+    }
+    
+    if (editingId) {
+      // Encontrar el verbo por ID en lugar de índice
+      const updated = verbsList.map(verb => 
+        verb.id === editingId ? {...formData, id: editingId} : verb
+      );
+      
+      // Ordenar después de actualizar
+      const sortedVerbs = [...updated].sort((a, b) => 
+        a.traduccion.localeCompare(b.traduccion)
+      );
+      
+      setVerbsList(sortedVerbs);
+      saveVerbsToFirestore(sortedVerbs);
+      setEditingId(null);
     } else {
-      const updated = [...verbsList, formData];
-      setVerbsList(updated);
-      saveVerbsToFirestore(updated);
+      const newVerb = {
+        ...formData,
+        id: Math.random().toString(36).substr(2, 9) // Nuevo ID único
+      };
+      
+      const updated = [...verbsList, newVerb];
+      
+      // Ordenar después de agregar
+      const sortedVerbs = [...updated].sort((a, b) => 
+        a.traduccion.localeCompare(b.traduccion)
+      );
+      
+      setVerbsList(sortedVerbs);
+      saveVerbsToFirestore(sortedVerbs);
     }
 
     setFormData({
@@ -98,17 +148,26 @@ const App = () => {
       participio: "",
       tipo: "regular",
     });
+    
+    setErrorMessage("");
   };
 
-  const handleDelete = (index) => {
-    const updated = verbsList.filter((_, i) => i !== index);
+  const handleDelete = (id) => {
+    const updated = verbsList.filter(verb => verb.id !== id);
     setVerbsList(updated);
     saveVerbsToFirestore(updated);
   };
 
-  const handleEdit = (index) => {
-    setFormData(verbsList[index]);
-    setEditingIndex(index);
+  const handleEdit = (verb) => {
+    setFormData({
+      verbo: verb.verbo,
+      traduccion: verb.traduccion,
+      pasado: verb.pasado,
+      participio: verb.participio,
+      tipo: verb.tipo
+    });
+    setEditingId(verb.id);
+    setErrorMessage("");
   };
 
   const handleTypeChange = (type) => {
@@ -160,7 +219,7 @@ const App = () => {
   return (
     <div className="container">
       <div className="header">
-        <h1>Diccionario de Verbos</h1>
+        <h1>Diccionario de Verbos <span className="verb-counter">({verbsList.length})</span></h1>
       </div>
       
       <form onSubmit={handleSubmit} className="verb-form">
@@ -175,7 +234,7 @@ const App = () => {
         <input
           type="text"
           name="traduccion"
-          placeholder="Traducción"
+          placeholder="Traducción (inglés)"
           value={formData.traduccion}
           onChange={handleChange}
           required
@@ -224,9 +283,16 @@ const App = () => {
           type="submit"
           className="btn-submit"
         >
-          {editingIndex !== null ? "Actualizar" : "Agregar"}
+          {editingId ? "Actualizar" : "Agregar"}
         </button>
       </form>
+
+      {/* Mensaje de error */}
+      {errorMessage && (
+        <div className="error-message">
+          {errorMessage}
+        </div>
+      )}
 
       {/* Campo de búsqueda */}
       <div className="search-container">
@@ -243,36 +309,36 @@ const App = () => {
         <table>
           <thead>
             <tr>
-              <th>Verbo</th>
-              <th>Traducción</th>
-              <th>Pasado</th>
-              <th>Participio</th>
-              <th>Tipo</th>
-              <th>Acciones</th>
+              <th className="verbo-col">Verbo</th>
+              <th className="traduccion-col">Traducción</th>
+              <th className="pasado-col">Pasado</th>
+              <th className="participio-col">Participio</th>
+              <th className="tipo-col">Tipo</th>
+              <th className="acciones-col">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {filteredVerbs.length > 0 ? (
-              filteredVerbs.map((verb, index) => (
-                <tr key={index} className={`${verb.tipo}-row`}>
+              filteredVerbs.map((verb) => (
+                <tr key={verb.id} className={`${verb.tipo}-row`}>
                   <td>{verb.verbo}</td>
                   <td>{verb.traduccion}</td>
                   <td>{verb.pasado}</td>
                   <td>{verb.participio}</td>
-                  <td className={verb.tipo}>
-                    {verb.tipo === "regular" ? "Regular" : 
-                     verb.tipo === "irregular" ? "Irregular" : "Phrasal Verb"}
+                  <td className={`tipo-cell ${verb.tipo}`}>
+                    {verb.tipo === "regular" ? "R" : 
+                     verb.tipo === "irregular" ? "I" : "V"}
                   </td>
                   <td>
                     <div className="action-buttons">
                       <button
-                        onClick={() => handleEdit(index)}
+                        onClick={() => handleEdit(verb)}
                         className="btn-edit"
                       >
                         Editar
                       </button>
                       <button
-                        onClick={() => handleDelete(index)}
+                        onClick={() => handleDelete(verb.id)}
                         className="btn-delete"
                       >
                         Eliminar
