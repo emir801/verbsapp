@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { db } from "./firebase";
 import {
   doc,
@@ -25,10 +25,11 @@ const App = () => {
 
   const [isLogged, setIsLogged] = useState(false);
   const [verbsList, setVerbsList] = useState([]);
-  const [editingId, setEditingId] = useState(null); // Cambiado a ID en lugar de índice
+  const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const formRef = useRef(null); // Referencia al formulario
   const userKey = `${userInfo.className}_${userInfo.username}`;
 
   // Escuchar cambios desde Firebase
@@ -168,6 +169,16 @@ const App = () => {
     });
     setEditingId(verb.id);
     setErrorMessage("");
+    
+    // Scroll automático al formulario después de un pequeño retraso
+    setTimeout(() => {
+      if (formRef.current) {
+        formRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    }, 50);
   };
 
   const handleTypeChange = (type) => {
@@ -222,7 +233,7 @@ const App = () => {
         <h1>Diccionario de Verbos <span className="verb-counter">({verbsList.length})</span></h1>
       </div>
       
-      <form onSubmit={handleSubmit} className="verb-form">
+      <form ref={formRef} onSubmit={handleSubmit} className="verb-form">
         <input
           type="text"
           name="verbo"

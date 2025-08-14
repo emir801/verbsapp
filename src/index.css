@@ -653,3 +653,18 @@ tbody tr {
     font-size: 10px;
   }
 }
+
+/* ... (estilos anteriores) ... */
+
+/* Animación de desplazamiento suave */
+html {
+  scroll-behavior: smooth;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ... (otros estilos) ... */
